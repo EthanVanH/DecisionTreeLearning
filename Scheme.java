@@ -42,6 +42,10 @@ public class Scheme{
         // System.out.println(atrbs);
     }
 
+    public List<Attribute> GetAttributes(){
+        return atrbs;
+    }
+    
     public Scheme(String filename){
         this.LoadScheme(filename);
     }

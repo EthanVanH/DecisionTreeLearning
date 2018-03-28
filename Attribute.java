@@ -18,11 +18,11 @@ public class Attribute{
         return possibleValues.size();
     }
 
-    public ArrayList<String> GetVals(){
-        return possibleValues;
+    public String GetVal(int index){
+        return possibleValues.get(index);
     }
 
-    public String name(){
+    public String GetName(){
         return name;
     }
 

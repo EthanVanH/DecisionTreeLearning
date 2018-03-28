@@ -14,7 +14,8 @@ public class DTLearn{
     public static void main(String[] args){
         testScheme();
         testExample();
-        testSample();    
+        testSample();
+        testMaths();    
     }
 
     /*Tests code*/
@@ -58,26 +59,32 @@ public class DTLearn{
 
     private static void testSample(){
         Sample test;
-        List<String> t1g = Arrays.asList("Sauce_Color - RED","Yes", "No", "No", "Yes","Yes","No", "Yes");
-        List<String> t2g = Arrays.asList("debt - HIGH", "HIGH", "HIGH", "LOW", "HIGH", "MODERATE", "HIGH", "HIGH");
-        List<String> t3g = Arrays.asList("foodType - FRENCH", "YES", "NO");
 
         System.out.println("Testing Sample class");
         System.out.println("Test1: -----------------");
         test = new Sample("Pasta.txt");
         test.Print();
-        System.out.println("Info is " + test.GetInfo(t1g,2));
         
         System.out.println("Test2: -----------------");
         test = new Sample("Loan.txt");
         test.Print();
-        System.out.println("Info is " + test.GetInfo(t2g,3));
         
         System.out.println("Test3: -----------------");
         test = new Sample("Rest.txt");
         test.Print();
-        System.out.println("Info is " + test.GetInfo(t3g,2));
 
+        System.out.println("-----------------------Test Complete------------------------");
+    }
+
+    private static void testMaths(){
+        Sample samp;
+        Scheme scheme;
+
+        System.out.println("Testing Get Attribute - and by proxy getRemainder");
+        samp = new Sample("Pasta.txt");
+        scheme = new Scheme("Pasta_sche.txt");
+
+        System.out.println(samp.GetAttribute(scheme.GetAttributes(), samp.GetExamples()));
         System.out.println("-----------------------Test Complete------------------------");
     }
 }

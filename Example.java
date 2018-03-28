@@ -18,6 +18,15 @@ public class Example{
         vals.addAll(v);
     }
 
+    //Returns the function value of this example
+    public String getFX(){
+        return vals.get(vals.size()-1);
+    }
+
+    public String GetValAt(int index){
+        return vals.get(index);
+    }
+
     public void Print(){
         System.out.println(names);
         System.out.println(vals);
