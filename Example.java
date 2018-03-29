@@ -23,6 +23,16 @@ public class Example{
         return vals.get(vals.size()-1);
     }
 
+    public int GetIndexOf(String nm){
+        for(int i = 0; i < names.size(); i++){
+            if(names.get(i).equals(nm)){
+                return i;
+            }
+        }
+        return -1;
+
+    }
+
     public String GetValAt(int index){
         return vals.get(index);
     }

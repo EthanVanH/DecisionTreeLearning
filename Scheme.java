@@ -45,7 +45,16 @@ public class Scheme{
     public List<Attribute> GetAttributes(){
         return atrbs;
     }
-    
+
+    public List<Attribute> GetAttrWithoutFX(){
+        List<Attribute> temp = new ArrayList<Attribute>();
+
+        for(int i = 0; i < atrbs.size()-1;i++){
+            temp.add(atrbs.get(i));
+        }
+        return temp; 
+    }
+
     public Scheme(String filename){
         this.LoadScheme(filename);
     }

@@ -12,10 +12,64 @@ import java.util.*;
 public class DTLearn{
 
     public static void main(String[] args){
-        testScheme();
-        testExample();
-        testSample();
-        testMaths();    
+        Sample sample;
+        Scheme scheme;
+
+        if(args.length < 2){
+            System.out.println("Please provide input files");
+            System.exit(0);
+        }
+
+        System.out.println("Learning starts:");
+
+        sample = new Sample(args[0]);
+        scheme = new Scheme(args[1]);
+        LearnDecisionTree(sample, scheme.GetAttrWithoutFX(), new Node(scheme));
+
+        // testScheme();
+        // testExample();
+        // testSample();
+        // testMaths();   
+        // testDT();
+        
+    }
+
+    public static Node LearnDecisionTree(Sample g, List<Attribute> attrbs, Node sMajor){
+        if(g.isEmpty()){
+            return sMajor;
+        }
+        if(g.AllAreOneVal()){ // If all examples in group are q
+            String q;
+            q = g.Getfxvalue();
+            return new Node(q);
+        }
+        if(attrbs.isEmpty()){
+            return new Node(majorityVal(g));
+        }
+        Attribute b = g.GetAttribute(attrbs,g.GetExamples());
+
+        Node tr = new Node(b);
+
+        Node m = majorityVal(g);
+        //m.setParent(sMajor);
+
+        for(String s: b.GetVals()){
+            //create subgroup of examples with value s
+            Sample subg = new Sample(b.GetName(),s,g);
+            List<Attribute> temp = new ArrayList<Attribute>();
+            temp = attrbs;
+            temp.remove(b);
+            //System.out.println(temp);
+            Node subtr = LearnDecisionTree(subg,temp,m);
+            tr.addChild(subtr);
+        }
+
+        return tr;
+    }
+
+    public static Node majorityVal(Sample g){
+        
+        return new Node(g.getMajVal());
     }
 
     /*Tests code*/
@@ -83,8 +137,41 @@ public class DTLearn{
         System.out.println("Testing Get Attribute - and by proxy getRemainder");
         samp = new Sample("Pasta.txt");
         scheme = new Scheme("Pasta_sche.txt");
-
-        System.out.println(samp.GetAttribute(scheme.GetAttributes(), samp.GetExamples()));
+        System.out.println(samp.GetAttribute(scheme.GetAttrWithoutFX(), samp.GetExamples()));
+        
+        samp = new Sample("Loan.txt");
+        scheme = new Scheme("Loan_sche.txt");
+        System.out.println(samp.GetAttribute(scheme.GetAttrWithoutFX(), samp.GetExamples()));
+        
+        samp = new Sample("Rest.txt");
+        scheme = new Scheme("Rest_sche.txt");
+        System.out.println(samp.GetAttribute(scheme.GetAttrWithoutFX(), samp.GetExamples()));
+        
         System.out.println("-----------------------Test Complete------------------------");
+    }
+
+    private static void testDT(){
+        Sample samp;
+        Scheme scheme;
+        System.out.println("Testing Get Learn Decision tree");
+        System.out.println("Test 1");
+        samp = new Sample("Loan.txt");
+        scheme = new Scheme("Loan_sche.txt");
+
+        LearnDecisionTree(samp, scheme.GetAttrWithoutFX(), new Node(scheme));
+        
+        System.out.println("Test 2");
+        samp = new Sample("Rest.txt");
+        scheme = new Scheme("Rest_sche.txt");
+
+        LearnDecisionTree(samp, scheme.GetAttrWithoutFX(), new Node(scheme));
+        
+        System.out.println("Test 3");
+        samp = new Sample("Pasta.txt");
+        scheme = new Scheme("Pasta_sche.txt");
+
+        LearnDecisionTree(samp, scheme.GetAttrWithoutFX(), new Node(scheme));
+        System.out.println("-----------------------Test Complete------------------------");
+ 
     }
 }

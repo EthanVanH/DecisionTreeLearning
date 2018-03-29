@@ -25,8 +25,11 @@ public class Node<T> {
     }
 
     public void setParent(Node<T> parent) {
-        parent.addChild(this);
-        this.parent = parent;
+        if(this.parent == null){
+            this.parent = parent;
+            parent.addChild(this);
+            
+        }
     }
 
     public void addChild(T data) {

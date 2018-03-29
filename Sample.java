@@ -4,6 +4,7 @@
 */
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class Sample{
     private List<String> atributes;
@@ -36,7 +37,72 @@ public class Sample{
 
         
     }
+    
+    public Sample(String name, String val, Sample og){
+        //Creates a sample
+        int index = og.GetIndex(name);
+        fxvalues = og.Getfxvalues();
+        samp = new ArrayList<Example>();
+        atributes = new ArrayList<String>();
+        atributes.addAll(og.GetAttributes());
+        for(Example e : og.GetExamples()){
+            if(e.GetValAt(e.GetIndexOf(name)).equals(val)){
+                samp.add(e);
+            }
+        }
+          
+    }
 
+    public List<String> GetAttributes(){
+        return atributes;
+    }
+
+    public boolean AllAreOneVal(){
+        String v1 = fxvalues.get(0);
+        for(int i = 0; i < fxvalues.size();i++){
+            if(!v1.equals(fxvalues.get(i))){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public String getMajVal(){
+        Map<String, Integer> map = new HashMap<>();
+
+        for(String s: fxvalues){
+            Integer val = map.get(s);
+            map.put(s, val == null ? 1: val+1);
+        }
+
+        Map.Entry<String, Integer> max = null;
+
+        for(Map.Entry<String, Integer> e : map.entrySet()){
+            if(max == null || e.getValue() > max.getValue()){
+                max = e;
+            }
+        }
+
+        return max.getKey();
+    }
+
+    public String Getfxvalue(){
+        return fxvalues.get(0);
+    }
+
+    public List<String> Getfxvalues(){
+        return fxvalues;
+    }
+
+    //Returns the index of a given attribute name
+    public int GetIndex(String attrname){
+        for(int i = 0; i < atributes.size(); i++){
+            if(atributes.get(i).equals(attrname)){
+                return i;
+            }
+        }
+        return -1;
+    }
 
     //Group is the spliting 'out' of a possible value of an attribute
     //k represents the number of possible *function* values
@@ -119,14 +185,14 @@ public class Sample{
         return remainder;
     }
 
-    //TODO getAttribute - returns the attribute to test on
+    //getAttribute - returns the attribute to test on
     public Attribute GetAttribute(List<Attribute> a, List<Example> g){
         int k = fxvalues.size();
         double info = GetInfo(g,k);
         double maxGain = -1;
         Attribute bestA = null;
 
-        for(int i = 0; i < a.size()-1; i++){//for each possible value of a
+        for(int i = 0; i < a.size(); i++){//for each possible value of a
             Attribute b = a.get(i);
             double remainder = GetRemainder(b,g,k);
             double gain = info - remainder;
@@ -136,8 +202,12 @@ public class Sample{
                 bestA = b;
             }
         }
-
+        System.out.println("  Test " + bestA.GetName() + ": gain = " + maxGain);
         return bestA;
+    }
+
+    public boolean isEmpty(){
+        return samp.isEmpty();
     }
 
     public List<Example> GetExamples(){

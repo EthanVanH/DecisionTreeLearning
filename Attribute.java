@@ -22,6 +22,10 @@ public class Attribute{
         return possibleValues.get(index);
     }
 
+    public List<String> GetVals(){
+        return possibleValues;
+    }
+
     public String GetName(){
         return name;
     }
