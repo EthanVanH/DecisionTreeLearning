@@ -65,4 +65,16 @@ public class Node<T> {
     public void removeParent() {
         this.parent = null;
     }
+
+    public String toString(){
+        return this.data.toString();
+    }
+    public void Print(){
+        System.out.println("Parent -" + this.parent);
+        System.out.println("Node:(" + this.data.toString() + ")");
+        for(int i = 0; i < children.size(); i++){
+            children.get(i).Print();
+        }
+        System.out.println("");
+    }
 }

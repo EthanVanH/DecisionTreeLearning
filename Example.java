@@ -37,9 +37,18 @@ public class Example{
         return vals.get(index);
     }
 
+    public void RemoveAtt(int index){
+        names.remove(index);
+        vals.remove(index);
+    }
+
     public void Print(){
         System.out.println(names);
         System.out.println(vals);
+    }
+
+    public String toString(){
+        return vals.toString();
     }
 
     public void PrintVals(){

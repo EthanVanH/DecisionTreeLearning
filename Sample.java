@@ -39,17 +39,39 @@ public class Sample{
     }
     
     public Sample(String name, String val, Sample og){
-        //Creates a sample
-        int index = og.GetIndex(name);
+        //Creates a sample without attributes named name
+
         fxvalues = og.Getfxvalues();
         samp = new ArrayList<Example>();
         atributes = new ArrayList<String>();
         atributes.addAll(og.GetAttributes());
+        atributes.remove(val);
         for(Example e : og.GetExamples()){
-            if(e.GetValAt(e.GetIndexOf(name)).equals(val)){
+            int index = e.GetIndexOf(name);
+            
+            if(index != -1){
+                e.RemoveAtt(index);
+                if(e.GetValAt(index).equals(val)){
+                samp.add(e);
+                }
+            }
+            else{
                 samp.add(e);
             }
+            
         }
+        
+        
+    }
+
+    public Sample(String val, Sample og){
+        //Creates a sample of all the examples witha  given value
+        fxvalues  = new ArrayList<String>();
+        fxvalues.add(val);
+        samp = new ArrayList<Example>();
+        atributes = new ArrayList<String>();
+        atributes.addAll(og.GetAttributes());
+        samp.addAll(og.GetAllSampsWith(val));
           
     }
 
@@ -102,6 +124,23 @@ public class Sample{
             }
         }
         return -1;
+    }
+
+    public List<Example> GetAllSampsWith(String givenfx){
+        List<Integer> indicies = new ArrayList<Integer>();
+
+        for(int i = 0; i < samp.size(); i++){
+            if(samp.get(i).getFX().equals(givenfx)){
+                indicies.add(i);
+            }
+        }
+
+        List<Example> samps = new ArrayList<Example>();
+
+        for(int i = 0; i < indicies.size(); i++){
+            samps.add(samp.get(indicies.get(i)));
+        }
+        return samps;
     }
 
     //Group is the spliting 'out' of a possible value of an attribute
@@ -197,12 +236,13 @@ public class Sample{
             double remainder = GetRemainder(b,g,k);
             double gain = info - remainder;
             //System.out.println("Gain of " + b + " is " + gain + "|" + info + "|" + remainder);
+            System.out.println("  Test " + b.GetName() + ": gain = " + gain);
             if(gain > maxGain){
                 maxGain = gain;
                 bestA = b;
             }
         }
-        System.out.println("  Test " + bestA.GetName() + ": gain = " + maxGain);
+        
         return bestA;
     }
 
@@ -212,6 +252,10 @@ public class Sample{
 
     public List<Example> GetExamples(){
         return samp;
+    }
+
+    public String toString(){
+        return atributes.toString() + samp.toString();
     }
 
     public void Print(){

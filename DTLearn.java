@@ -16,7 +16,7 @@ public class DTLearn{
         Scheme scheme;
 
         if(args.length < 2){
-            System.out.println("Please provide input files");
+            System.out.println("Please provide input files \"sample\" \"scheme\"");
             System.exit(0);
         }
 
@@ -24,8 +24,11 @@ public class DTLearn{
 
         sample = new Sample(args[0]);
         scheme = new Scheme(args[1]);
-        LearnDecisionTree(sample, scheme.GetAttrWithoutFX(), new Node(scheme));
+        Node tree = LearnDecisionTree(sample, scheme.GetAttrWithoutFX(), "");
+        
+        AskToPrint(tree);
 
+        /*Tests for each major class of this program*/
         // testScheme();
         // testExample();
         // testSample();
@@ -34,23 +37,26 @@ public class DTLearn{
         
     }
 
-    public static Node LearnDecisionTree(Sample g, List<Attribute> attrbs, Node sMajor){
+    public static Node LearnDecisionTree(Sample g, List<Attribute> attrbs, String sMajor){
         if(g.isEmpty()){
-            return sMajor;
+            return new Node(sMajor);
         }
         if(g.AllAreOneVal()){ // If all examples in group are q
-            String q;
-            q = g.Getfxvalue();
-            return new Node(q);
+            List<Example> q;
+            q = g.GetExamples();
+
+            return new Node(g);
         }
         if(attrbs.isEmpty()){
             return new Node(majorityVal(g));
         }
         Attribute b = g.GetAttribute(attrbs,g.GetExamples());
 
+        System.out.println("    Split on: " + b.GetName());
+
         Node tr = new Node(b);
 
-        Node m = majorityVal(g);
+        String m = g.getMajVal();
         //m.setParent(sMajor);
 
         for(String s: b.GetVals()){
@@ -67,9 +73,16 @@ public class DTLearn{
         return tr;
     }
 
-    public static Node majorityVal(Sample g){
-        
-        return new Node(g.getMajVal());
+    public static Sample majorityVal(Sample g){
+        return new Sample (g.getMajVal(),g);
+    }
+
+    public static void AskToPrint(Node tree){
+        Scanner kbd = new Scanner (System.in);
+        System.out.println("Print tree? y/n");
+        String decision = kbd.nextLine();
+
+        tree.Print();
     }
 
     /*Tests code*/
@@ -158,19 +171,19 @@ public class DTLearn{
         samp = new Sample("Loan.txt");
         scheme = new Scheme("Loan_sche.txt");
 
-        LearnDecisionTree(samp, scheme.GetAttrWithoutFX(), new Node(scheme));
+        LearnDecisionTree(samp, scheme.GetAttrWithoutFX(), "");
         
         System.out.println("Test 2");
         samp = new Sample("Rest.txt");
         scheme = new Scheme("Rest_sche.txt");
 
-        LearnDecisionTree(samp, scheme.GetAttrWithoutFX(), new Node(scheme));
+        LearnDecisionTree(samp, scheme.GetAttrWithoutFX(), "");
         
         System.out.println("Test 3");
         samp = new Sample("Pasta.txt");
         scheme = new Scheme("Pasta_sche.txt");
 
-        LearnDecisionTree(samp, scheme.GetAttrWithoutFX(), new Node(scheme));
+        LearnDecisionTree(samp, scheme.GetAttrWithoutFX(), "");
         System.out.println("-----------------------Test Complete------------------------");
  
     }
